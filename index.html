@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Medehub CRM dashboard for pharmacy onboarding, delivery partner recruitment, B2B sales, follow-ups, campaigns, and WhatsApp operations."
+    />
+    <title>Medehub CRM Cloud Dashboard</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">M</div>
+          <div>
+            <h1>Medehub CRM</h1>
+            <p>Cloud Operations</p>
+          </div>
+        </div>
+        <nav class="nav-list" id="navList" aria-label="CRM sections"></nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <label class="search" aria-label="Search CRM">
+            <span aria-hidden="true">⌕</span>
+            <input id="globalSearch" placeholder="Search leads, riders, B2B customers, phone numbers..." />
+          </label>
+          <button class="primary-btn" data-action="new-lead">New Lead</button>
+          <button class="icon-btn" data-action="whatsapp" aria-label="WhatsApp replies">
+            <span>18</span>
+            W
+          </button>
+          <div class="avatar" aria-label="CRM profile">CRM</div>
+        </header>
+
+        <section class="workspace" id="workspace"></section>
+      </main>
+    </div>
+
+    <div class="modal" id="leadModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
+      <div class="modal-panel">
+        <div class="modal-head">
+          <h2 id="modalTitle">Lead Action</h2>
+          <button class="icon-btn quiet" id="closeModal" aria-label="Close">×</button>
+        </div>
+        <form class="lead-form" id="leadForm">
+          <input name="name" placeholder="Name / Business Name" required />
+          <input name="phone" placeholder="Mobile / WhatsApp Number" required />
+          <select name="type">
+            <option>Pharmacy</option>
+            <option>Delivery Partner</option>
+            <option>B2B Customer</option>
+          </select>
+          <select name="stage">
+            <option>New</option>
+            <option>Contacted</option>
+            <option>Interested</option>
+            <option>KYC Pending</option>
+            <option>Negotiation</option>
+            <option>Converted</option>
+            <option>Lost</option>
+          </select>
+          <textarea name="notes" placeholder="Remarks / follow-up note"></textarea>
+          <div class="form-actions">
+            <button class="primary-btn" type="submit">Save Lead</button>
+            <button class="success-btn" type="button" data-action="send-whatsapp">Send WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="./src/app.js"></script>
+  </body>
+</html>
