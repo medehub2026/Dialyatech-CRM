@@ -1,42 +1,86 @@
-# Medehub CRM Cloud Dashboard
+# Dialyatech / Medehub CRM
 
-A cloud-ready CRM dashboard for Medehub marketing and onboarding teams. It tracks pharmacy leads, delivery partner onboarding, B2B sales, follow-ups, WhatsApp activity, campaigns, reports, and team performance.
+Professional cloud-ready CRM software for Medehub marketing and operations teams. Built with React, Vite, TailwindCSS, persisted demo data, reusable components, and a service layer prepared for future backend APIs.
 
-## Features
+## Modules
 
-- Responsive CRM dashboard with sidebar navigation
-- Lead tables for pharmacy, delivery, and B2B workflows
-- Sales pipeline board
-- Follow-up task list
-- Interakt WhatsApp API settings and message log screens
-- Campaign, team, report, and settings screens
-- Static deployment friendly: no backend or build step required
+- Dashboard with funnel, activity, WhatsApp replies, and priority follow-ups
+- Pharmacy onboarding CRM with KYC, GST, drug-license, assignment, block, edit, delete, and follow-up workflows
+- Delivery partner onboarding CRM with vehicle, license, police verification, and training tracking
+- B2B sales CRM with customer category, deal value, quotation, negotiation, and lost reason fields
+- Drag-and-drop sales pipeline with status dropdown fallback
+- Follow-up management with today, overdue, upcoming, completed, reschedule, and complete actions
+- WhatsApp / Interakt API center with template UI, settings, logs, and service structure
+- Campaign management, team performance, reports, settings, login placeholder, and role UI placeholders
+
+## Installation
+
+```bash
+npm install
+```
 
 ## Run Locally
 
-Open `index.html` in a browser, or serve the folder with any static server:
+```bash
+npm run dev
+```
+
+Open the local URL printed by Vite.
+
+## Build
 
 ```bash
-npx serve .
+npm run build
+npm run preview
 ```
 
-## Deploy
+## Environment Variables
 
-This project can be deployed to GitHub Pages, Netlify, Vercel, Cloudflare Pages, or any static hosting platform.
+Create `.env` from `.env.example`:
 
-For GitHub Pages:
+```bash
+VITE_INTERAKT_API_KEY=
+VITE_INTERAKT_BASE_URL=https://api.interakt.ai
+```
 
-1. Push this project to a GitHub repository.
-2. Open repository settings.
-3. Enable Pages from the `main` branch and root folder.
+Do not hardcode real API keys in frontend code. Move secrets to a backend service before production.
 
-## Project Structure
+## Deployment
+
+### GitHub Pages
+
+This repo includes `.github/workflows/pages.yml`.
+
+1. Go to repository Settings → Pages.
+2. Set Source to `GitHub Actions`.
+3. Push to `main`.
+4. Wait for the Pages workflow to finish.
+
+Live URL:
 
 ```text
-.
-├── index.html
-├── src
-│   ├── app.js
-│   └── styles.css
-└── README.md
+https://medehub2026.github.io/Dialyatech-CRM/
 ```
+
+### Vercel
+
+1. Import the GitHub repository into Vercel.
+2. Framework preset: Vite.
+3. Build command: `npm run build`.
+4. Output directory: `dist`.
+
+## Future Backend Integration
+
+The app currently uses `localStorage` for persistence. Backend connection points are separated for easier migration:
+
+- `src/services/storageService.js`: replace local storage with API reads/writes.
+- `src/services/interaktService.js`: connect Interakt WhatsApp API through a secure backend proxy.
+- `src/hooks/useCRMData.jsx`: central CRM state/actions; replace functions with API calls.
+- `src/data/demoData.js`: seed data only.
+
+Recommended production backend:
+
+- Auth with role-based access control.
+- REST or GraphQL CRM APIs for leads, messages, campaigns, users, reports, and settings.
+- Server-side Interakt webhook handler.
+- Audit logs for lead edits, deletes, blocks, and status changes.
