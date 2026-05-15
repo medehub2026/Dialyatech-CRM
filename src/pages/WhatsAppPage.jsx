@@ -1,17 +1,17 @@
 import { Plus, Send } from "lucide-react";
 import { useState } from "react";
+import WhatsAppTemplateForm from "../components/forms/WhatsAppTemplateForm";
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 import { interaktConfig } from "../services/interaktService";
 
 export default function WhatsAppPage({ actions }) {
   const { leads, messages, templates, setTemplates, settings, setSettings } = useCRMData();
-  const [templateForm, setTemplateForm] = useState({ name: "", code: "", category: "All", status: "Draft" });
+  const [templateOpen, setTemplateOpen] = useState(false);
 
-  const addTemplate = () => {
-    if (!templateForm.name || !templateForm.code) return;
+  const addTemplate = (templateForm) => {
     setTemplates((items) => [{ id: `tpl-${Date.now()}`, ...templateForm }, ...items]);
-    setTemplateForm({ name: "", code: "", category: "All", status: "Draft" });
+    setTemplateOpen(false);
   };
 
   return (
@@ -58,14 +58,13 @@ export default function WhatsAppPage({ actions }) {
           <div className="crm-card p-5">
             <h2 className="font-black text-slate-950">Template management</h2>
             <div className="mt-4 grid gap-3">
-              <input className="crm-input" placeholder="Template name" value={templateForm.name} onChange={(e) => setTemplateForm({ ...templateForm, name: e.target.value })} />
-              <input className="crm-input" placeholder="Template ID / code" value={templateForm.code} onChange={(e) => setTemplateForm({ ...templateForm, code: e.target.value })} />
-              <button className="crm-btn-primary" onClick={addTemplate}><Plus size={16} /> Add template</button>
+              <button className="crm-btn-primary" onClick={() => setTemplateOpen(true)}><Plus size={16} /> Add template</button>
               <div className="grid gap-2">{templates.map((tpl) => <div key={tpl.id} className="rounded-xl bg-slate-50 p-3 text-sm"><b>{tpl.name}</b><p className="text-slate-500">{tpl.code}</p></div>)}</div>
             </div>
           </div>
         </div>
       </section>
+      <WhatsAppTemplateForm open={templateOpen} onClose={() => setTemplateOpen(false)} onSave={addTemplate} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 export const LEAD_STATUSES = ["New", "Contacted", "Interested", "KYC Pending", "Approved", "Rejected", "Negotiation", "Converted", "Lost"];
 export const PIPELINE_STAGES = ["New", "Contacted", "Interested", "KYC Pending", "Negotiation", "Converted", "Lost"];
 export const LEAD_TYPES = ["Pharmacy", "Delivery Partner", "B2B Customer"];
-export const ROLES = ["Admin", "Marketing Manager", "Sales Executive", "Support Executive"];
+export const ROLES = ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"];
 
 export const teamMembers = [
   { id: "tm-1", name: "Rahul Sharma", role: "Sales Executive", city: "Guwahati" },

@@ -4,6 +4,7 @@ import AppLayout from "./layouts/AppLayout";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 import { CRMProvider } from "./hooks/useCRMData";
+import { authApi, apiAvailable } from "./services/apiClient";
 import "./styles/index.css";
 
 function App() {
@@ -12,18 +13,25 @@ function App() {
     return stored ? JSON.parse(stored) : null;
   });
 
-  const login = (payload) => {
-    const nextSession = {
-      name: payload.name || "Medehub Admin",
-      role: payload.role || "Admin",
-      email: payload.email || "admin@medehub.in",
-    };
+  const login = async (payload) => {
+    let nextSession;
+    if (apiAvailable() && payload.password) {
+      nextSession = await authApi.login(payload);
+      nextSession = { ...nextSession, role: normalizeRole(nextSession.role) };
+    } else {
+      nextSession = {
+        name: payload.name || "Medehub Admin",
+        role: payload.role || "Super Admin",
+        email: payload.email || "admin@medehub.in",
+      };
+    }
     localStorage.setItem("dialyatech_session", JSON.stringify(nextSession));
     setSession(nextSession);
   };
 
   const logout = () => {
     localStorage.removeItem("dialyatech_session");
+    authApi.logout();
     setSession(null);
   };
 
@@ -41,3 +49,7 @@ function App() {
 }
 
 createRoot(document.getElementById("root")).render(<App />);
+
+function normalizeRole(role = "Super Admin") {
+  return role.toLowerCase().split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+}

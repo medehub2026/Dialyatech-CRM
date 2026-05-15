@@ -1,5 +1,6 @@
 import { CalendarPlus, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import FollowUpTaskForm from "../components/forms/FollowUpTaskForm";
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 import { isOverdue, isToday } from "../utils/calculations";
@@ -7,6 +8,7 @@ import { isOverdue, isToday } from "../utils/calculations";
 export default function FollowupsPage({ actions }) {
   const { leads, markFollowup, updateLead } = useCRMData();
   const [newDate, setNewDate] = useState("");
+  const [taskLead, setTaskLead] = useState(null);
   const groups = {
     "Today follow-ups": leads.filter((lead) => isToday(lead.nextFollowUp)),
     "Overdue follow-ups": leads.filter((lead) => isOverdue(lead.nextFollowUp)),
@@ -16,9 +18,10 @@ export default function FollowupsPage({ actions }) {
 
   return (
     <div className="grid gap-5">
-      <div>
-        <h1 className="text-3xl font-black text-slate-950">Follow-up Management</h1>
-        <p className="mt-2 text-slate-500">Add reminders, mark complete, reschedule, and keep marketing callbacks disciplined.</p>
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div><h1 className="text-3xl font-black text-slate-950">Follow-up Management</h1>
+        <p className="mt-2 text-slate-500">Add reminders, mark complete, reschedule, and keep marketing callbacks disciplined.</p></div>
+        <button className="crm-btn-primary" onClick={() => setTaskLead(leads[0])}><CalendarPlus size={16} /> Add reminder</button>
       </div>
       <section className="grid gap-5 xl:grid-cols-4">
         {Object.entries(groups).map(([title, rows]) => (
@@ -35,6 +38,7 @@ export default function FollowupsPage({ actions }) {
                       <button className="crm-btn-soft flex-1" onClick={() => newDate && markFollowup(lead.id, newDate)}><CalendarPlus size={15} /> Reschedule</button>
                       <button className="crm-btn-success flex-1" onClick={() => updateLead(lead.id, { status: "Contacted" })}><CheckCircle2 size={15} /> Complete</button>
                     </div>
+                    <button className="crm-btn-soft" onClick={() => setTaskLead(lead)}>Add note / task</button>
                   </div>
                 </article>
               ))}
@@ -42,6 +46,7 @@ export default function FollowupsPage({ actions }) {
           </div>
         ))}
       </section>
+      <FollowUpTaskForm open={Boolean(taskLead)} lead={taskLead} onClose={() => setTaskLead(null)} />
     </div>
   );
 }

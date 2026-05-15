@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import ConfirmDialog from "../components/ConfirmDialog";
-import LeadModal from "../components/LeadModal";
+import LeadFormRouter from "../components/forms/LeadFormRouter";
 import Sidebar from "../components/Sidebar";
 import ToastNotification from "../components/ToastNotification";
 import Topbar from "../components/Topbar";
@@ -76,11 +76,11 @@ export default function AppLayout({ auth }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Sidebar page={page} setPage={setPage} collapsed={collapsed} setCollapsed={setCollapsed} />
+      <Sidebar page={page} setPage={setPage} collapsed={collapsed} setCollapsed={setCollapsed} role={role} />
       {mobileOpen ? (
         <div className="fixed inset-0 z-50 bg-slate-950/60 lg:hidden" onClick={() => setMobileOpen(false)}>
           <div className="h-full w-80 bg-slate-950 text-white" onClick={(event) => event.stopPropagation()}>
-            <Sidebar mobile page={page} setPage={(next) => { setPage(next); setMobileOpen(false); }} collapsed={false} setCollapsed={() => {}} />
+            <Sidebar mobile page={page} setPage={(next) => { setPage(next); setMobileOpen(false); }} collapsed={false} setCollapsed={() => {}} role={role} />
           </div>
         </div>
       ) : null}
@@ -88,7 +88,7 @@ export default function AppLayout({ auth }) {
         <Topbar auth={auth} pageTitle={titles[page]} onNewLead={() => actions.newLead()} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} globalSearch={globalSearch} setGlobalSearch={setGlobalSearch} role={role} setRole={setRole} resetDemo={crm.resetDemo} />
         <main className="p-4 lg:p-6">{pages[page]}</main>
       </div>
-      <LeadModal open={leadModal.open} mode={leadModal.mode} lead={leadModal.lead} onClose={() => setLeadModal({ open: false, mode: "create", lead: null })} onSave={saveLead} />
+      <LeadFormRouter open={leadModal.open} mode={leadModal.mode} lead={leadModal.lead} onClose={() => setLeadModal({ open: false, mode: "create", lead: null })} onSave={saveLead} />
       <WhatsAppTemplateModal open={Boolean(whatsAppLead)} lead={whatsAppLead} user={auth.session} onClose={() => setWhatsAppLead(null)} />
       <ConfirmDialog open={Boolean(confirm)} {...confirm} onCancel={() => setConfirm(null)} />
       <ToastNotification />

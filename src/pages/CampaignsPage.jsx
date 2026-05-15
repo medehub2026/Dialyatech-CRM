@@ -1,26 +1,22 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import CampaignForm from "../components/forms/CampaignForm";
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 
 export default function CampaignsPage() {
   const { campaigns, addCampaign } = useCRMData();
-  const [form, setForm] = useState({ name: "", audience: "Pharmacy", area: "Guwahati", status: "Draft" });
-  const create = () => {
-    if (!form.name) return;
-    addCampaign(form);
-    setForm({ name: "", audience: "Pharmacy", area: "Guwahati", status: "Draft" });
+  const [formOpen, setFormOpen] = useState(false);
+  const create = (campaign) => {
+    addCampaign(campaign);
+    setFormOpen(false);
   };
   return (
     <div className="grid gap-6">
       <div><h1 className="text-3xl font-black text-slate-950">Campaign Management</h1><p className="mt-2 text-slate-500">Create targeted pharmacy, delivery partner, or B2B campaigns with delivery, reply, and conversion tracking.</p></div>
-      <section className="crm-card p-5">
-        <div className="grid gap-3 md:grid-cols-5">
-          <input className="crm-input md:col-span-2" placeholder="Campaign name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <select className="crm-input" value={form.audience} onChange={(e) => setForm({ ...form, audience: e.target.value })}><option>Pharmacy</option><option>Delivery Partner</option><option>B2B Customer</option></select>
-          <input className="crm-input" placeholder="Area" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} />
-          <button className="crm-btn-primary" onClick={create}><Plus size={16} /> Create</button>
-        </div>
+      <section className="crm-card flex flex-col justify-between gap-4 p-5 md:flex-row md:items-center">
+        <div><h2 className="font-black text-slate-950">Campaign console</h2><p className="text-sm text-slate-500">Create targeted area-wise campaigns with scheduling and template selection.</p></div>
+        <button className="crm-btn-primary" onClick={() => setFormOpen(true)}><Plus size={16} /> Create campaign</button>
       </section>
       <section className="grid gap-4 lg:grid-cols-3">
         {campaigns.map((campaign) => (
@@ -35,6 +31,7 @@ export default function CampaignsPage() {
           </article>
         ))}
       </section>
+      <CampaignForm open={formOpen} onClose={() => setFormOpen(false)} onSave={create} />
     </div>
   );
 }

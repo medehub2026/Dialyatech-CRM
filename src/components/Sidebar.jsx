@@ -1,20 +1,21 @@
 import { BarChart3, Building2, CalendarClock, Gauge, LayoutDashboard, Megaphone, MessageSquare, PanelLeftClose, PanelLeftOpen, Settings, ShoppingBag, Truck, Users } from "lucide-react";
 
 const items = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "pharmacy", label: "Pharmacy CRM", icon: ShoppingBag },
-  { id: "delivery", label: "Delivery CRM", icon: Truck },
-  { id: "b2b", label: "B2B Sales", icon: Building2 },
-  { id: "pipeline", label: "Sales Pipeline", icon: Gauge },
-  { id: "followups", label: "Follow-ups", icon: CalendarClock },
-  { id: "whatsapp", label: "WhatsApp API", icon: MessageSquare },
-  { id: "campaigns", label: "Campaigns", icon: Megaphone },
-  { id: "team", label: "Team", icon: Users },
-  { id: "reports", label: "Reports", icon: BarChart3 },
-  { id: "settings", label: "Settings", icon: Settings },
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"] },
+  { id: "pharmacy", label: "Pharmacy CRM", icon: ShoppingBag, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
+  { id: "delivery", label: "Delivery CRM", icon: Truck, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
+  { id: "b2b", label: "B2B Sales", icon: Building2, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
+  { id: "pipeline", label: "Sales Pipeline", icon: Gauge, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
+  { id: "followups", label: "Follow-ups", icon: CalendarClock, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"] },
+  { id: "whatsapp", label: "WhatsApp API", icon: MessageSquare, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Support Executive"] },
+  { id: "campaigns", label: "Campaigns", icon: Megaphone, roles: ["Super Admin", "CRM Admin", "Marketing Manager"] },
+  { id: "team", label: "Team", icon: Users, roles: ["Super Admin", "CRM Admin", "Marketing Manager"] },
+  { id: "reports", label: "Reports", icon: BarChart3, roles: ["Super Admin", "CRM Admin", "Marketing Manager"] },
+  { id: "settings", label: "Settings", icon: Settings, roles: ["Super Admin", "CRM Admin"] },
 ];
 
-export default function Sidebar({ page, setPage, collapsed, setCollapsed, mobile = false }) {
+export default function Sidebar({ page, setPage, collapsed, setCollapsed, mobile = false, role = "Super Admin" }) {
+  const visibleItems = items.filter((item) => item.roles.includes(role));
   return (
     <aside className={`${mobile ? "flex h-full w-80" : `${collapsed ? "lg:w-20" : "lg:w-72"} fixed inset-y-0 left-0 z-40 hidden lg:flex`} border-r border-slate-800 bg-slate-950 text-white transition-all flex-col`}>
       <div className="flex items-center justify-between border-b border-white/10 p-5">
@@ -27,7 +28,7 @@ export default function Sidebar({ page, setPage, collapsed, setCollapsed, mobile
         </button>
       </div>
       <nav className="grid gap-1 overflow-y-auto p-3">
-        {items.map((item) => {
+        {visibleItems.map((item) => {
           const Icon = item.icon;
           const active = page === item.id;
           return (

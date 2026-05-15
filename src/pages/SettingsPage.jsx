@@ -1,8 +1,11 @@
 import { Save } from "lucide-react";
+import { useState } from "react";
+import UserRoleForm from "../components/forms/UserRoleForm";
 import { useCRMData } from "../hooks/useCRMData";
 
 export default function SettingsPage() {
   const { settings, setSettings, toast } = useCRMData();
+  const [roleOpen, setRoleOpen] = useState(false);
   const update = (key, value) => setSettings({ ...settings, [key]: value });
   return (
     <div className="grid gap-6">
@@ -14,6 +17,7 @@ export default function SettingsPage() {
             <label><span className="crm-label mb-1 block">Lead auto assignment rule</span><input className="crm-input" value={settings.autoAssignmentRule || ""} onChange={(e) => update("autoAssignmentRule", e.target.value)} /></label>
             <label><span className="crm-label mb-1 block">Follow-up reminder time</span><input className="crm-input" type="time" value={settings.reminderTime || ""} onChange={(e) => update("reminderTime", e.target.value)} /></label>
             <label><span className="crm-label mb-1 block">User roles</span><input className="crm-input" value={(settings.roles || []).join(", ")} onChange={(e) => update("roles", e.target.value.split(",").map((item) => item.trim()))} /></label>
+            <button className="crm-btn-soft w-fit" type="button" onClick={() => setRoleOpen(true)}>Configure role permissions</button>
           </div>
         </div>
         <div className="crm-card p-5">
@@ -30,6 +34,7 @@ export default function SettingsPage() {
         </div>
       </section>
       <button className="crm-btn-primary w-fit" onClick={() => toast("Settings saved")}><Save size={16} /> Save settings</button>
+      <UserRoleForm open={roleOpen} onClose={() => setRoleOpen(false)} />
     </div>
   );
 }

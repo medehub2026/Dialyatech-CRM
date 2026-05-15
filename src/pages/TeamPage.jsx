@@ -1,14 +1,18 @@
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import TeamMemberForm from "../components/forms/TeamMemberForm";
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 import { calculateTeamPerformance } from "../utils/calculations";
 
 export default function TeamPage() {
   const { leads, messages, teamMembers } = useCRMData();
+  const [open, setOpen] = useState(false);
   const rows = calculateTeamPerformance(leads, messages, teamMembers);
 
   return (
     <div className="grid gap-6">
-      <div><h1 className="text-3xl font-black text-slate-950">Marketing Team Performance</h1><p className="mt-2 text-slate-500">Measure leads assigned, calls, WhatsApp messages, completed follow-ups, conversions, and performance score.</p></div>
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><h1 className="text-3xl font-black text-slate-950">Marketing Team Performance</h1><p className="mt-2 text-slate-500">Measure leads assigned, calls, WhatsApp messages, completed follow-ups, conversions, and performance score.</p></div><button className="crm-btn-primary" onClick={() => setOpen(true)}><Plus size={16} /> Add team member</button></div>
       <div className="crm-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-[900px] w-full text-left text-sm">
@@ -30,6 +34,7 @@ export default function TeamPage() {
           </table>
         </div>
       </div>
+      <TeamMemberForm open={open} onClose={() => setOpen(false)} />
     </div>
   );
 }

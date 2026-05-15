@@ -4,6 +4,17 @@ import { ROLES } from "../data/demoData";
 
 export default function LoginPage({ onLogin }) {
   const [form, setForm] = useState({ name: "Medehub Admin", email: "admin@medehub.in", role: "Admin" });
+  const [password, setPassword] = useState("admin123");
+  const [error, setError] = useState("");
+  const submit = async (event) => {
+    event.preventDefault();
+    setError("");
+    try {
+      await onLogin({ ...form, password });
+    } catch (err) {
+      setError(err.message || "Login failed");
+    }
+  };
   return (
     <div className="grid min-h-screen bg-slate-950 lg:grid-cols-[1.1fr_0.9fr]">
       <section className="flex items-center p-8 text-white lg:p-14">
@@ -14,13 +25,15 @@ export default function LoginPage({ onLogin }) {
         </div>
       </section>
       <section className="flex items-center justify-center bg-slate-50 p-6">
-        <form className="crm-card w-full max-w-md p-6" onSubmit={(event) => { event.preventDefault(); onLogin(form); }}>
+        <form className="crm-card w-full max-w-md p-6" onSubmit={submit}>
           <h2 className="text-2xl font-black text-slate-950">Login placeholder</h2>
           <p className="mt-2 text-sm text-slate-500">Authentication-ready UI. Connect your backend auth later.</p>
           <div className="mt-6 grid gap-4">
             <label><span className="crm-label mb-1 block">Name</span><input className="crm-input" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label>
             <label><span className="crm-label mb-1 block">Email</span><input className="crm-input" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label>
+            <label><span className="crm-label mb-1 block">Password</span><input className="crm-input" type="password" value={password} onChange={(event) => setPassword(event.target.value)} /></label>
             <label><span className="crm-label mb-1 block">Role</span><select className="crm-input" value={form.role} onChange={(event) => setForm({ ...form, role: event.target.value })}>{ROLES.map((role) => <option key={role}>{role}</option>)}</select></label>
+            {error ? <div className="rounded-xl bg-rose-50 p-3 text-sm font-semibold text-rose-700">{error}</div> : null}
             <button className="crm-btn-primary">Enter CRM</button>
           </div>
         </form>

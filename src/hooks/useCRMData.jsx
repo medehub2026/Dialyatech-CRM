@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { demoCampaigns, demoLeads, demoMessageLogs, demoSettings, demoTemplates, teamMembers } from "../data/demoData";
+import { apiAvailable, crmApi, leadApi } from "../services/apiClient";
 import { loadState, resetCRMStorage, saveState } from "../services/storageService";
 
 const CRMContext = createContext(null);
@@ -11,6 +12,23 @@ export function CRMProvider({ children }) {
   const [templates, setTemplates] = useState(() => loadState("templates", demoTemplates));
   const [settings, setSettings] = useState(() => loadState("settings", demoSettings));
   const [toasts, setToasts] = useState([]);
+  const [apiMode, setApiMode] = useState("local");
+
+  useEffect(() => {
+    if (!apiAvailable()) return;
+    Promise.all([
+      leadApi.list("Pharmacy"),
+      leadApi.list("Delivery Partner"),
+      leadApi.list("B2B Customer"),
+      crmApi.campaigns().catch(() => demoCampaigns),
+    ]).then(([pharmacy, delivery, b2b, apiCampaigns]) => {
+      setLeads([...pharmacy, ...delivery, ...b2b]);
+      setCampaigns(apiCampaigns);
+      setApiMode("api");
+    }).catch(() => {
+      setApiMode("local");
+    });
+  }, []);
 
   useEffect(() => saveState("leads", leads), [leads]);
   useEffect(() => saveState("messages", messages), [messages]);
@@ -24,7 +42,7 @@ export function CRMProvider({ children }) {
     window.setTimeout(() => setToasts((items) => items.filter((item) => item.id !== id)), 3200);
   };
 
-  const addLead = (lead) => {
+  const addLead = async (lead) => {
     const nextLead = {
       id: `lead-${Date.now()}`,
       createdAt: new Date().toISOString().slice(0, 10),
@@ -32,23 +50,48 @@ export function CRMProvider({ children }) {
       status: "New",
       ...lead,
     };
-    setLeads((items) => [nextLead, ...items]);
-    toast("Lead added successfully");
+    try {
+      const saved = apiMode === "api" ? await leadApi.create(nextLead) : nextLead;
+      setLeads((items) => [saved, ...items]);
+      toast("Lead added successfully");
+    } catch (error) {
+      toast(error.message || "Lead save failed", "warning");
+    }
   };
 
-  const updateLead = (leadId, patch) => {
-    setLeads((items) => items.map((lead) => (lead.id === leadId ? { ...lead, ...patch } : lead)));
-    toast("Lead updated");
+  const updateLead = async (leadId, patch) => {
+    const current = leads.find((lead) => lead.id === leadId);
+    const next = { ...current, ...patch };
+    try {
+      const saved = apiMode === "api" && current ? await leadApi.update(next) : next;
+      setLeads((items) => items.map((lead) => (lead.id === leadId ? saved : lead)));
+      toast("Lead updated");
+    } catch (error) {
+      toast(error.message || "Lead update failed", "warning");
+    }
   };
 
-  const deleteLead = (leadId) => {
-    setLeads((items) => items.filter((lead) => lead.id !== leadId));
-    toast("Lead deleted", "warning");
+  const deleteLead = async (leadId) => {
+    const current = leads.find((lead) => lead.id === leadId);
+    try {
+      if (apiMode === "api" && current) await leadApi.remove(current);
+      setLeads((items) => items.filter((lead) => lead.id !== leadId));
+      toast("Lead deleted", "warning");
+    } catch (error) {
+      toast(error.message || "Lead delete failed", "warning");
+    }
   };
 
-  const blockLead = (leadId) => {
-    setLeads((items) => items.map((lead) => (lead.id === leadId ? { ...lead, blocked: !lead.blocked } : lead)));
-    toast("Lead block status updated", "warning");
+  const blockLead = async (leadId) => {
+    const current = leads.find((lead) => lead.id === leadId);
+    const blocked = !current?.blocked;
+    try {
+      const saved = apiMode === "api" && current ? await leadApi.block(current, blocked) : { ...current, blocked };
+      setLeads((items) => items.map((lead) => (lead.id === leadId ? saved : lead)));
+      toast("Lead block status updated", "warning");
+    } catch (error) {
+      toast(error.message || "Lead block failed", "warning");
+    }
   };
 
   const addMessage = (message) => {
@@ -56,9 +99,22 @@ export function CRMProvider({ children }) {
     toast("WhatsApp message log created");
   };
 
-  const addCampaign = (campaign) => {
-    setCampaigns((items) => [{ id: `camp-${Date.now()}`, sent: 0, delivered: 0, replies: 0, conversions: 0, ...campaign }, ...items]);
-    toast("Campaign created");
+  const addCampaign = async (campaign) => {
+    const nextCampaign = { id: `camp-${Date.now()}`, sent: 0, delivered: 0, replies: 0, conversions: 0, ...campaign };
+    try {
+      const saved = apiMode === "api" ? await crmApi.createCampaign({
+        name: nextCampaign.name,
+        audienceType: nextCampaign.audience || nextCampaign.audienceType,
+        city: nextCampaign.city,
+        area: nextCampaign.area,
+        templateName: nextCampaign.templateName || "follow_up_reminder",
+        status: nextCampaign.status,
+      }) : nextCampaign;
+      setCampaigns((items) => [saved, ...items]);
+      toast("Campaign created");
+    } catch (error) {
+      toast(error.message || "Campaign save failed", "warning");
+    }
   };
 
   const markFollowup = (leadId, date) => updateLead(leadId, { nextFollowUp: date });
@@ -92,8 +148,9 @@ export function CRMProvider({ children }) {
       markFollowup,
       resetDemo,
       toast,
+      apiMode,
     }),
-    [leads, messages, campaigns, templates, settings, toasts],
+    [leads, messages, campaigns, templates, settings, toasts, apiMode],
   );
 
   return <CRMContext.Provider value={value}>{children}</CRMContext.Provider>;

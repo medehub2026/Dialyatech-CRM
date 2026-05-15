@@ -1,86 +1,177 @@
 # Dialyatech / Medehub CRM
 
-Professional cloud-ready CRM software for Medehub marketing and operations teams. Built with React, Vite, TailwindCSS, persisted demo data, reusable components, and a service layer prepared for future backend APIs.
+Zoho-style full-stack CRM for Medehub marketing, onboarding, sales, follow-up, WhatsApp, campaign, team, and reporting workflows.
 
-## Modules
+## Tech Stack
 
-- Dashboard with funnel, activity, WhatsApp replies, and priority follow-ups
-- Pharmacy onboarding CRM with KYC, GST, drug-license, assignment, block, edit, delete, and follow-up workflows
-- Delivery partner onboarding CRM with vehicle, license, police verification, and training tracking
-- B2B sales CRM with customer category, deal value, quotation, negotiation, and lost reason fields
-- Drag-and-drop sales pipeline with status dropdown fallback
-- Follow-up management with today, overdue, upcoming, completed, reschedule, and complete actions
-- WhatsApp / Interakt API center with template UI, settings, logs, and service structure
-- Campaign management, team performance, reports, settings, login placeholder, and role UI placeholders
+- Frontend: React + Vite + TailwindCSS
+- Backend: Node.js + Express
+- Auth: JWT with role-based access placeholders
+- Database: PostgreSQL + Prisma ORM
+- Fallback: API and frontend can run with in-memory/localStorage demo data when a database is not configured
 
-## Installation
+## CRM Modules
 
-```bash
-npm install
-```
-
-## Run Locally
-
-```bash
-npm run dev
-```
-
-Open the local URL printed by Vite.
-
-## Build
-
-```bash
-npm run build
-npm run preview
-```
+- Login and protected CRM shell
+- Dashboard with lead KPIs, follow-ups, activity, funnel, and reports
+- Pharmacy onboarding leads with a pharmacy-specific form
+- Delivery partner onboarding leads with a rider/KYC-specific form
+- B2B customer sales leads with a deal-specific form
+- Kanban sales pipeline
+- Follow-up task management
+- WhatsApp / Interakt center with backend service structure
+- Campaign management with campaign-specific form
+- Team performance
+- Reports
+- Settings and role permission placeholder
 
 ## Environment Variables
 
 Create `.env` from `.env.example`:
 
 ```bash
-VITE_INTERAKT_API_KEY=
-VITE_INTERAKT_BASE_URL=https://api.interakt.ai
+VITE_API_BASE_URL=http://localhost:4000/api
+
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/dialyatech_crm
+JWT_SECRET=change-this-secret-before-production
+PORT=4000
+
+INTERAKT_API_KEY=
+INTERAKT_BASE_URL=https://api.interakt.ai
+INTERAKT_WEBHOOK_SECRET=
 ```
 
-Do not hardcode real API keys in frontend code. Move secrets to a backend service before production.
+Do not expose Interakt API keys in frontend code. Keep `INTERAKT_API_KEY` only on the backend.
+
+## Install
+
+```bash
+npm install
+```
+
+## Run Frontend Only
+
+Uses localStorage fallback if no backend URL is configured.
+
+```bash
+npm run dev
+```
+
+## Run Backend
+
+Without `DATABASE_URL`, the API runs with in-memory demo fallback:
+
+```bash
+npm run dev:api
+```
+
+Health check:
+
+```bash
+curl http://localhost:4000/api/health
+```
+
+Demo login:
+
+```text
+admin@medehub.in
+admin123
+```
+
+## Run Full Stack
+
+```bash
+npm run dev:full
+```
+
+## Database Setup
+
+Use Supabase PostgreSQL, Neon, Railway PostgreSQL, or local PostgreSQL.
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+```
+
+Open Prisma Studio:
+
+```bash
+npm run prisma:studio
+```
+
+## API Routes
+
+Auth:
+
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+
+Lead APIs:
+
+- `/api/pharmacy-leads`
+- `/api/delivery-leads`
+- `/api/b2b-leads`
+
+Each lead API supports:
+
+- `GET /`
+- `POST /`
+- `GET /:id`
+- `PUT /:id`
+- `DELETE /:id`
+- `PATCH /:id/status`
+- `PATCH /:id/assign`
+- `PATCH /:id/block`
+
+Other APIs:
+
+- `/api/followups`
+- `/api/whatsapp/send-template`
+- `/api/whatsapp/messages`
+- `/api/whatsapp/webhook`
+- `/api/whatsapp/templates`
+- `/api/campaigns`
+- `/api/reports/dashboard`
+- `/api/reports/conversion`
+- `/api/reports/team-performance`
+- `/api/reports/whatsapp`
+- `/api/reports/area-wise-leads`
+
+## Build
+
+```bash
+npm run build
+```
 
 ## Deployment
 
-### GitHub Pages
+Frontend on Vercel:
 
-This repo includes `.github/workflows/pages.yml`.
+1. Import GitHub repo.
+2. Build command: `npm run build`
+3. Output directory: `dist`
+4. Add `VITE_API_BASE_URL=https://your-backend/api`
 
-1. Go to repository Settings → Pages.
-2. Set Source to `GitHub Actions`.
-3. Push to `main`.
-4. Wait for the Pages workflow to finish.
+Backend on Render or Railway:
 
-Live URL:
+1. Create a Node service from this repo.
+2. Start command: `npm run dev:api` or `node server/src/index.js`
+3. Add `DATABASE_URL`, `JWT_SECRET`, `INTERAKT_API_KEY`, `INTERAKT_BASE_URL`, `INTERAKT_WEBHOOK_SECRET`.
+4. Run Prisma migration against your PostgreSQL database.
 
-```text
-https://medehub2026.github.io/Dialyatech-CRM/
-```
+Database:
 
-### Vercel
+- Supabase PostgreSQL or Neon is recommended.
 
-1. Import the GitHub repository into Vercel.
-2. Framework preset: Vite.
-3. Build command: `npm run build`.
-4. Output directory: `dist`.
+GitHub Pages:
 
-## Future Backend Integration
+The workflow builds the frontend only. Backend APIs must be hosted separately.
 
-The app currently uses `localStorage` for persistence. Backend connection points are separated for easier migration:
+## Future Production Hardening
 
-- `src/services/storageService.js`: replace local storage with API reads/writes.
-- `src/services/interaktService.js`: connect Interakt WhatsApp API through a secure backend proxy.
-- `src/hooks/useCRMData.jsx`: central CRM state/actions; replace functions with API calls.
-- `src/data/demoData.js`: seed data only.
-
-Recommended production backend:
-
-- Auth with role-based access control.
-- REST or GraphQL CRM APIs for leads, messages, campaigns, users, reports, and settings.
-- Server-side Interakt webhook handler.
-- Audit logs for lead edits, deletes, blocks, and status changes.
+- Replace fallback storage with PostgreSQL in all environments.
+- Add refresh tokens and password reset.
+- Add audit log UI for every lead mutation.
+- Add server-side Interakt webhook signature verification.
+- Add pagination, CSV export endpoints, and background campaign jobs.
+- Add file upload for KYC/compliance documents.
