@@ -13,10 +13,11 @@ export default function LeadModulePage({ title, description, type, actions, glob
 
   return (
     <div className="grid gap-5">
-      <section className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+      <section className="dialyatech-panel flex flex-col justify-between gap-4 p-5 lg:flex-row lg:items-center">
         <div>
-          <h1 className="text-3xl font-black text-slate-950">{title}</h1>
-          <p className="mt-2 max-w-3xl text-slate-500">{description}</p>
+          <span className="dialyatech-chip">{type} workflow</span>
+          <h1 className="mt-3 text-3xl font-black text-[#130d2e]">{title}</h1>
+          <p className="mt-2 max-w-3xl text-[#4b4469]">{description}</p>
         </div>
         <button className="crm-btn-primary" onClick={() => actions.newLead(type)}><Plus size={16} /> Add {type}</button>
       </section>

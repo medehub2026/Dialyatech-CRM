@@ -23,7 +23,7 @@ export default function DataTable({ rows, onView, onEdit, onDelete, onBlock, onW
     <div className="crm-card overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-[1180px] w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+          <thead className="bg-[#f7f5fc] text-xs uppercase tracking-wide text-[#4b4469]">
             <tr>
               <th className="px-4 py-3">{header("name", "Lead")}</th>
               <th className="px-4 py-3">{header("type", "Type")}</th>
@@ -35,15 +35,15 @@ export default function DataTable({ rows, onView, onEdit, onDelete, onBlock, onW
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-[#ede6ff]">
             {sortedRows.map((lead) => (
-              <tr key={lead.id} className={lead.blocked ? "bg-rose-50/50" : "bg-white"}>
+              <tr key={lead.id} className={`${lead.blocked ? "bg-rose-50/50" : "bg-white"} transition hover:bg-[#faf9fe]`}>
                 <td className="px-4 py-3">
-                  <div className="font-bold text-slate-950">{lead.name}</div>
-                  <div className="text-xs text-slate-500">{lead.ownerName || lead.customerCategory || "CRM Lead"}</div>
+                  <div className="font-bold text-[#130d2e]">{lead.name}</div>
+                  <div className="text-xs font-semibold text-[#4b4469]/75">{lead.ownerName || lead.customerCategory || "CRM Lead"}</div>
                 </td>
-                <td className="px-4 py-3 text-slate-700">{lead.type}</td>
-                <td className="px-4 py-3 text-slate-700">{lead.area}, {lead.city}</td>
+                <td className="px-4 py-3 text-[#4b4469]">{lead.type}</td>
+                <td className="px-4 py-3 text-[#4b4469]">{lead.area}, {lead.city}</td>
                 <td className="px-4 py-3">
                   {onStatusChange ? (
                     <select className="crm-input py-1.5" value={lead.status} onChange={(event) => onStatusChange(lead, event.target.value)}>
@@ -51,16 +51,16 @@ export default function DataTable({ rows, onView, onEdit, onDelete, onBlock, onW
                     </select>
                   ) : <StatusBadge value={lead.status} />}
                 </td>
-                <td className="px-4 py-3 text-slate-700">{lead.assignedTo}</td>
-                <td className="px-4 py-3 text-slate-700">{lead.mobile}</td>
-                <td className="px-4 py-3 text-slate-700">{lead.nextFollowUp || "Not set"}</td>
+                <td className="px-4 py-3 text-[#4b4469]">{lead.assignedTo}</td>
+                <td className="px-4 py-3 text-[#4b4469]">{lead.mobile}</td>
+                <td className="px-4 py-3 text-[#4b4469]">{lead.nextFollowUp || "Not set"}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <button className="rounded-lg p-2 text-slate-500 hover:bg-slate-100" title="View" onClick={() => onView(lead)}><Eye size={16} /></button>
-                    <button className="rounded-lg p-2 text-blue-600 hover:bg-blue-50" title="Edit" onClick={() => onEdit(lead)}><Edit3 size={16} /></button>
-                    <button className="rounded-lg p-2 text-green-600 hover:bg-green-50" title="Send WhatsApp" onClick={() => onWhatsApp(lead)}><MessageSquare size={16} /></button>
-                    <button className="rounded-lg p-2 text-amber-600 hover:bg-amber-50" title="Block" onClick={() => onBlock(lead)}><Ban size={16} /></button>
-                    <button className="rounded-lg p-2 text-rose-600 hover:bg-rose-50" title="Delete" onClick={() => onDelete(lead)}><Trash2 size={16} /></button>
+                    <button className="rounded-xl p-2 text-[#4b4469] hover:bg-[#ede6ff]" title="View" onClick={() => onView(lead)}><Eye size={16} /></button>
+                    <button className="rounded-xl p-2 text-[#6b3fd4] hover:bg-[#ede6ff]" title="Edit" onClick={() => onEdit(lead)}><Edit3 size={16} /></button>
+                    <button className="rounded-xl p-2 text-emerald-600 hover:bg-emerald-50" title="Send WhatsApp" onClick={() => onWhatsApp(lead)}><MessageSquare size={16} /></button>
+                    <button className="rounded-xl p-2 text-amber-600 hover:bg-amber-50" title="Block" onClick={() => onBlock(lead)}><Ban size={16} /></button>
+                    <button className="rounded-xl p-2 text-rose-600 hover:bg-rose-50" title="Delete" onClick={() => onDelete(lead)}><Trash2 size={16} /></button>
                   </div>
                 </td>
               </tr>

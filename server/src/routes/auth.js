@@ -36,7 +36,7 @@ router.get("/me", requireAuth, async (req, res) => {
 
 function sanitizeUser(user) {
   if (!user) return null;
-  const { passwordHash, ...safe } = user;
+  const { passwordHash: _passwordHash, ...safe } = user;
   return safe;
 }
 
