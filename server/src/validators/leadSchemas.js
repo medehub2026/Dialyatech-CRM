@@ -69,3 +69,24 @@ export const b2bSchema = z.object({
   remarks: z.string().optional(),
   status: z.string().default("NEW"),
 });
+
+export const d2cSchema = z.object({
+  customerName: z.string().min(2),
+  mobile: phone,
+  whatsappNumber: optionalPhone,
+  email: optionalEmail,
+  city: z.string().min(2),
+  area: z.string().min(2),
+  address: z.string().optional(),
+  customerCategory: z.string().default("Home Delivery"),
+  requirementType: z.string().optional(),
+  expectedOrderValue: z.coerce.number().nonnegative().optional(),
+  lastOrderValue: z.coerce.number().nonnegative().optional(),
+  purchaseIntent: z.string().default("Medium"),
+  leadSource: z.string().optional(),
+  reminderOptIn: z.string().default("Yes"),
+  assignedTo: z.string().optional(),
+  nextFollowUpDate: futureDate,
+  remarks: z.string().optional(),
+  status: z.string().default("NEW"),
+});

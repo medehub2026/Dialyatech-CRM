@@ -1,11 +1,13 @@
-import { BarChart3, Building2, CalendarClock, Gauge, LayoutDashboard, Megaphone, MessageSquare, PanelLeftClose, PanelLeftOpen, Settings, ShoppingBag, Sparkles, Truck, Users } from "lucide-react";
+import { BarChart3, Building2, CalendarClock, Gauge, LayoutDashboard, Megaphone, MessageSquare, PanelLeftClose, PanelLeftOpen, Settings, ShoppingBag, Sparkles, Truck, UserRound, Users, Zap } from "lucide-react";
 
 const items = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"] },
   { id: "pharmacy", label: "Pharmacy CRM", icon: ShoppingBag, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
   { id: "delivery", label: "Delivery CRM", icon: Truck, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
   { id: "b2b", label: "B2B Sales", icon: Building2, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
+  { id: "d2c", label: "D2C Leads", icon: UserRound, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"] },
   { id: "pipeline", label: "Sales Pipeline", icon: Gauge, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
+  { id: "automation", label: "Sales Automation", icon: Zap, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive"] },
   { id: "followups", label: "Follow-ups", icon: CalendarClock, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"] },
   { id: "whatsapp", label: "WhatsApp API", icon: MessageSquare, roles: ["Super Admin", "CRM Admin", "Marketing Manager", "Support Executive"] },
   { id: "campaigns", label: "Campaigns", icon: Megaphone, roles: ["Super Admin", "CRM Admin", "Marketing Manager"] },
@@ -15,7 +17,8 @@ const items = [
 ];
 
 export default function Sidebar({ page, setPage, collapsed, setCollapsed, mobile = false, role = "Super Admin" }) {
-  const visibleItems = items.filter((item) => item.roles.includes(role));
+  const normalizedRole = items.some((item) => item.roles.includes(role)) ? role : "Super Admin";
+  const visibleItems = items.filter((item) => item.roles.includes(normalizedRole));
   return (
     <aside className={`${mobile ? "flex h-full w-80" : `${collapsed ? "lg:w-20" : "lg:w-72"} fixed inset-y-0 left-0 z-40 hidden lg:flex`} border-r border-white/10 bg-[#130d2e] text-white transition-all flex-col shadow-2xl`}>
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_10%,rgba(255,79,174,0.22),transparent_18rem),radial-gradient(circle_at_85%_0%,rgba(62,201,214,0.18),transparent_16rem)]" />

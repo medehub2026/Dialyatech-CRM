@@ -1,6 +1,6 @@
 export const LEAD_STATUSES = ["New", "Contacted", "Interested", "KYC Pending", "Approved", "Rejected", "Negotiation", "Converted", "Lost"];
 export const PIPELINE_STAGES = ["New", "Contacted", "Interested", "KYC Pending", "Negotiation", "Converted", "Lost"];
-export const LEAD_TYPES = ["Pharmacy", "Delivery Partner", "B2B Customer"];
+export const LEAD_TYPES = ["Pharmacy", "Delivery Partner", "B2B Customer", "D2C Customer"];
 export const ROLES = ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"];
 
 export const teamMembers = [
@@ -172,6 +172,54 @@ export const demoLeads = [
     negotiationStatus: "Not Started",
     lostReason: "",
   },
+  {
+    id: "lead-1009",
+    type: "D2C Customer",
+    name: "Ananya Wellness Order",
+    ownerName: "Ananya Saikia",
+    mobile: "7002701122",
+    whatsapp: "7002701122",
+    email: "ananya@example.com",
+    area: "Khanapara",
+    city: "Guwahati",
+    status: "Interested",
+    assignedTo: "Rahul Sharma",
+    blocked: false,
+    remarks: "Asked for monthly diabetes medicine subscription and refill reminder.",
+    nextFollowUp: "2026-05-19",
+    createdAt: "2026-05-12",
+    customerCategory: "Chronic Care",
+    requirementType: "Monthly medicine refill",
+    dealValue: 6200,
+    leadSource: "WhatsApp Campaign",
+    purchaseIntent: "High",
+    lastOrderValue: 1850,
+    reminderOptIn: "Yes",
+  },
+  {
+    id: "lead-1010",
+    type: "D2C Customer",
+    name: "Rohit Home Delivery",
+    ownerName: "Rohit Das",
+    mobile: "9864501234",
+    whatsapp: "9864501234",
+    email: "rohit@example.com",
+    area: "Beltola",
+    city: "Guwahati",
+    status: "Contacted",
+    assignedTo: "Meera Nath",
+    blocked: false,
+    remarks: "Needs same-day home delivery for family medicine order.",
+    nextFollowUp: "2026-05-20",
+    createdAt: "2026-05-14",
+    customerCategory: "Home Delivery",
+    requirementType: "Repeat household order",
+    dealValue: 3200,
+    leadSource: "Website",
+    purchaseIntent: "Medium",
+    lastOrderValue: 0,
+    reminderOptIn: "Yes",
+  },
 ];
 
 export const demoMessageLogs = [
@@ -185,6 +233,8 @@ export const demoTemplates = [
   { id: "tpl-2", name: "Delivery Partner Pitch", code: "delivery_partner_pitch", category: "Delivery Partner", status: "Approved" },
   { id: "tpl-3", name: "B2B Sales Offer", code: "b2b_sales_offer", category: "B2B Customer", status: "Approved" },
   { id: "tpl-4", name: "Follow-up Reminder", code: "follow_up_reminder", category: "All", status: "Draft" },
+  { id: "tpl-5", name: "D2C Refill Reminder", code: "d2c_refill_reminder", category: "D2C Customer", status: "Approved" },
+  { id: "tpl-6", name: "D2C Cart Recovery", code: "d2c_cart_recovery", category: "D2C Customer", status: "Approved" },
 ];
 
 export const demoCampaigns = [
@@ -196,6 +246,8 @@ export const demoCampaigns = [
 export const demoSettings = {
   autoAssignmentRule: "Round robin by city and lead type",
   reminderTime: "09:30",
+  salesReminderCadence: "Daily at 09:30 for due and overdue B2B/D2C leads",
+  interaktAutomationEnabled: true,
   whatsappBusinessNumber: "+91 98640 00000",
   webhookUrl: "https://api.medehub.in/webhooks/interakt",
   pipelineStages: PIPELINE_STAGES,

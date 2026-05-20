@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ROLES } from "../data/demoData";
 
 export default function LoginPage({ onLogin }) {
-  const [form, setForm] = useState({ name: "Medehub Admin", email: "admin@medehub.in", role: "Admin" });
+  const [form, setForm] = useState({ name: "Medehub Admin", email: "admin@medehub.in", role: "Super Admin" });
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
   const submit = async (event) => {

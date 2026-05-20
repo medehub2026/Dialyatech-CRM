@@ -9,7 +9,7 @@ import { leadRoutes } from "./routes/crudRoutes.js";
 import followupsRoutes from "./routes/followups.js";
 import reportsRoutes from "./routes/reports.js";
 import whatsappRoutes from "./routes/whatsapp.js";
-import { pharmacySchema, deliverySchema, b2bSchema } from "./validators/leadSchemas.js";
+import { pharmacySchema, deliverySchema, b2bSchema, d2cSchema } from "./validators/leadSchemas.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -25,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/pharmacy-leads", leadRoutes({ collection: "pharmacyLeads", idPrefix: "ph", leadType: "PharmacyLead", schema: pharmacySchema }));
 app.use("/api/delivery-leads", leadRoutes({ collection: "deliveryLeads", idPrefix: "dl", leadType: "DeliveryPartnerLead", schema: deliverySchema }));
 app.use("/api/b2b-leads", leadRoutes({ collection: "b2bLeads", idPrefix: "b2b", leadType: "B2BCustomerLead", schema: b2bSchema }));
+app.use("/api/d2c-leads", leadRoutes({ collection: "d2cLeads", idPrefix: "d2c", leadType: "D2CCustomerLead", schema: d2cSchema }));
 app.use("/api/followups", followupsRoutes);
 app.use("/api/whatsapp", whatsappRoutes);
 app.use("/api/campaigns", campaignsRoutes);

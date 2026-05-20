@@ -51,6 +51,7 @@ const endpointByType = {
   Pharmacy: "/pharmacy-leads",
   "Delivery Partner": "/delivery-leads",
   "B2B Customer": "/b2b-leads",
+  "D2C Customer": "/d2c-leads",
 };
 
 export const leadApi = {
@@ -168,6 +169,28 @@ export function toApiLead(lead) {
       status: toApiStatus(lead.status),
     };
   }
+  if (lead.type === "D2C Customer") {
+    return {
+      customerName: lead.customerName || lead.ownerName || lead.name,
+      mobile: lead.mobile,
+      whatsappNumber: lead.whatsappNumber || lead.whatsapp,
+      email: lead.email,
+      city: lead.city,
+      area: lead.area,
+      address: lead.address,
+      customerCategory: lead.customerCategory,
+      requirementType: lead.requirementType,
+      expectedOrderValue: lead.expectedOrderValue || lead.dealValue,
+      lastOrderValue: lead.lastOrderValue,
+      purchaseIntent: lead.purchaseIntent,
+      leadSource: lead.leadSource,
+      reminderOptIn: lead.reminderOptIn,
+      assignedTo: lead.assignedTo,
+      nextFollowUpDate: lead.nextFollowUpDate || lead.nextFollowUp,
+      remarks: lead.remarks,
+      status: toApiStatus(lead.status),
+    };
+  }
   return {
     businessName: lead.businessName || lead.name,
     contactPerson: lead.contactPerson || lead.ownerName,
@@ -209,6 +232,18 @@ export function fromApiLead(type, item) {
       name: item.fullName,
       ownerName: item.fullName,
       whatsapp: item.whatsappNumber,
+      status: fromApiStatus(item.status),
+      nextFollowUp: item.nextFollowUpDate?.slice(0, 10),
+    };
+  }
+  if (type === "D2C Customer") {
+    return {
+      ...item,
+      type,
+      name: item.customerName,
+      ownerName: item.customerName,
+      whatsapp: item.whatsappNumber,
+      dealValue: item.expectedOrderValue,
       status: fromApiStatus(item.status),
       nextFollowUp: item.nextFollowUpDate?.slice(0, 10),
     };

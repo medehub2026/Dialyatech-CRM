@@ -8,12 +8,14 @@ import WhatsAppTemplateModal from "../components/WhatsAppTemplateModal";
 import { useCRMData } from "../hooks/useCRMData";
 import B2BPage from "../pages/B2BPage";
 import CampaignsPage from "../pages/CampaignsPage";
+import D2CPage from "../pages/D2CPage";
 import DashboardPage from "../pages/DashboardPage";
 import DeliveryPage from "../pages/DeliveryPage";
 import FollowupsPage from "../pages/FollowupsPage";
 import PharmacyPage from "../pages/PharmacyPage";
 import PipelinePage from "../pages/PipelinePage";
 import ReportsPage from "../pages/ReportsPage";
+import SalesAutomationPage from "../pages/SalesAutomationPage";
 import SettingsPage from "../pages/SettingsPage";
 import TeamPage from "../pages/TeamPage";
 import WhatsAppPage from "../pages/WhatsAppPage";
@@ -23,7 +25,9 @@ const titles = {
   pharmacy: "Pharmacy Onboarding CRM",
   delivery: "Delivery Partner CRM",
   b2b: "B2B Sales Customer CRM",
+  d2c: "D2C Lead Management",
   pipeline: "Sales Pipeline",
+  automation: "Sales Automation",
   followups: "Follow-up Management",
   whatsapp: "WhatsApp / Interakt API Center",
   campaigns: "Campaign Management",
@@ -65,7 +69,9 @@ export default function AppLayout({ auth }) {
     pharmacy: <PharmacyPage {...shared} />,
     delivery: <DeliveryPage {...shared} />,
     b2b: <B2BPage {...shared} />,
+    d2c: <D2CPage {...shared} />,
     pipeline: <PipelinePage {...shared} />,
+    automation: <SalesAutomationPage {...shared} setPage={setPage} />,
     followups: <FollowupsPage {...shared} />,
     whatsapp: <WhatsAppPage {...shared} />,
     campaigns: <CampaignsPage {...shared} />,

@@ -20,9 +20,10 @@ export function CRMProvider({ children }) {
       leadApi.list("Pharmacy"),
       leadApi.list("Delivery Partner"),
       leadApi.list("B2B Customer"),
+      leadApi.list("D2C Customer"),
       crmApi.campaigns().catch(() => demoCampaigns),
-    ]).then(([pharmacy, delivery, b2b, apiCampaigns]) => {
-      setLeads([...pharmacy, ...delivery, ...b2b]);
+    ]).then(([pharmacy, delivery, b2b, d2c, apiCampaigns]) => {
+      setLeads([...pharmacy, ...delivery, ...b2b, ...d2c]);
       setCampaigns(apiCampaigns);
       setApiMode("api");
     }).catch(() => {

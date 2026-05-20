@@ -19,6 +19,7 @@ export default function DashboardPage({ setPage }) {
     ["Pharmacy leads", stats.pharmacy, "Onboarding pipeline", ShoppingBag, "green"],
     ["Delivery leads", stats.delivery, "Rider onboarding", Truck, "blue"],
     ["B2B customers", stats.b2b, "Sales accounts", Building2, "slate"],
+    ["D2C leads", stats.d2c, "Consumer orders", Target, "blue"],
     ["Converted", stats.converted, "Closed won", CheckCircle2, "green"],
     ["Follow-ups due", stats.followupsDue, "Today + overdue", Clock3, "amber"],
     ["WhatsApp replies", stats.whatsappReplies, "Needs response", MessageSquare, "green"],
