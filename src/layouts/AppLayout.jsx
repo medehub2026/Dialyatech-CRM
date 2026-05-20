@@ -20,7 +20,7 @@ import SalesAutomationPage from "../pages/SalesAutomationPage";
 import SettingsPage from "../pages/SettingsPage";
 import TeamPage from "../pages/TeamPage";
 import WhatsAppPage from "../pages/WhatsAppPage";
-import { canAccessPage, canSwitchRoles, getAllowedLeadTypes, getDefaultPage, PAGE_LEAD_TYPES } from "../utils/accessControl";
+import { canAccessPage, canSwitchRoles, getAllowedLeadTypes, getDefaultPage, getOperationLabel, PAGE_LEAD_TYPES } from "../utils/accessControl";
 
 const titles = {
   dashboard: "Dashboard",
@@ -85,7 +85,8 @@ export default function AppLayout({ auth }) {
     setLeadModal({ open: true, mode: "create", lead: { type } });
   };
 
-  const shared = { globalSearch, actions, role };
+  const operationLabel = useMemo(() => getOperationLabel(role), [role]);
+  const shared = { globalSearch, actions, role, scopedLeadTypes: allowedLeadTypes, operationLabel };
   const pages = {
     dashboard: <DashboardPage {...shared} setPage={guardedSetPage} />,
     pharmacy: <PharmacyPage {...shared} />,

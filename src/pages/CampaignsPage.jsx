@@ -4,22 +4,31 @@ import CampaignForm from "../components/forms/CampaignForm";
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 
-export default function CampaignsPage() {
+const audienceByLeadType = {
+  Pharmacy: "Pharmacy",
+  "Delivery Partner": "Delivery Partner",
+  "B2B Customer": "B2B Customer",
+  "D2C Customer": "D2C Customer",
+};
+
+export default function CampaignsPage({ scopedLeadTypes = [], operationLabel }) {
   const { campaigns, addCampaign } = useCRMData();
   const [formOpen, setFormOpen] = useState(false);
+  const allowedAudiences = scopedLeadTypes.map((type) => audienceByLeadType[type]);
+  const visibleCampaigns = allowedAudiences.length ? campaigns.filter((campaign) => allowedAudiences.includes(campaign.audience || campaign.audienceType)) : campaigns;
   const create = (campaign) => {
     addCampaign(campaign);
     setFormOpen(false);
   };
   return (
     <div className="grid gap-6">
-      <div><h1 className="text-3xl font-black text-slate-950">Campaign Management</h1><p className="mt-2 text-slate-500">Create targeted pharmacy, delivery partner, or B2B campaigns with delivery, reply, and conversion tracking.</p></div>
+      <div><p className="dialyatech-chip">{operationLabel}</p><h1 className="mt-3 text-3xl font-black text-slate-950">Campaign Management</h1><p className="mt-2 text-slate-500">Create targeted campaigns with delivery, reply, and conversion tracking for your assigned operation.</p></div>
       <section className="crm-card flex flex-col justify-between gap-4 p-5 md:flex-row md:items-center">
         <div><h2 className="font-black text-slate-950">Campaign console</h2><p className="text-sm text-slate-500">Create targeted area-wise campaigns with scheduling and template selection.</p></div>
         <button className="crm-btn-primary" onClick={() => setFormOpen(true)}><Plus size={16} /> Create campaign</button>
       </section>
       <section className="grid gap-4 lg:grid-cols-3">
-        {campaigns.map((campaign) => (
+        {visibleCampaigns.map((campaign) => (
           <article key={campaign.id} className="crm-card p-5">
             <div className="flex items-start justify-between gap-3"><div><h2 className="font-black text-slate-950">{campaign.name}</h2><p className="text-sm text-slate-500">{campaign.audience} · {campaign.area}</p></div><StatusBadge value={campaign.status} /></div>
             <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
@@ -31,7 +40,7 @@ export default function CampaignsPage() {
           </article>
         ))}
       </section>
-      <CampaignForm open={formOpen} onClose={() => setFormOpen(false)} onSave={create} />
+      <CampaignForm open={formOpen} audiences={allowedAudiences.length ? allowedAudiences : undefined} onClose={() => setFormOpen(false)} onSave={create} />
     </div>
   );
 }

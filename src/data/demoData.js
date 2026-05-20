@@ -245,6 +245,7 @@ export const demoCampaigns = [
   { id: "camp-1", name: "Pharmacy Onboarding Drive", audience: "Pharmacy", area: "Guwahati", status: "Running", sent: 4200, delivered: 3988, replies: 412, conversions: 64 },
   { id: "camp-2", name: "Delivery Partner Recruitment", audience: "Delivery Partner", area: "Beltola", status: "Scheduled", sent: 1850, delivered: 0, replies: 0, conversions: 0 },
   { id: "camp-3", name: "B2B Wholesale Sales", audience: "B2B Customer", area: "Assam", status: "Draft", sent: 0, delivered: 0, replies: 0, conversions: 0 },
+  { id: "camp-4", name: "B2C Refill Reminder", audience: "D2C Customer", area: "Guwahati", status: "Running", sent: 980, delivered: 911, replies: 86, conversions: 24 },
 ];
 
 export const demoSettings = {

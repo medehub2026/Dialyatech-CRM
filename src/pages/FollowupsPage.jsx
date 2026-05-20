@@ -4,24 +4,26 @@ import FollowUpTaskForm from "../components/forms/FollowUpTaskForm";
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 import { isOverdue, isToday } from "../utils/calculations";
+import { filterLeadsByRole } from "../utils/accessControl";
 
-export default function FollowupsPage({ actions }) {
+export default function FollowupsPage({ actions, role, operationLabel }) {
   const { leads, markFollowup, updateLead } = useCRMData();
   const [newDate, setNewDate] = useState("");
   const [taskLead, setTaskLead] = useState(null);
+  const visibleLeads = filterLeadsByRole(leads, role);
   const groups = {
-    "Today follow-ups": leads.filter((lead) => isToday(lead.nextFollowUp)),
-    "Overdue follow-ups": leads.filter((lead) => isOverdue(lead.nextFollowUp)),
-    "Upcoming follow-ups": leads.filter((lead) => lead.nextFollowUp && !isToday(lead.nextFollowUp) && !isOverdue(lead.nextFollowUp)),
-    "Completed follow-ups": leads.filter((lead) => ["Contacted", "Converted"].includes(lead.status)),
+    "Today follow-ups": visibleLeads.filter((lead) => isToday(lead.nextFollowUp)),
+    "Overdue follow-ups": visibleLeads.filter((lead) => isOverdue(lead.nextFollowUp)),
+    "Upcoming follow-ups": visibleLeads.filter((lead) => lead.nextFollowUp && !isToday(lead.nextFollowUp) && !isOverdue(lead.nextFollowUp)),
+    "Completed follow-ups": visibleLeads.filter((lead) => ["Contacted", "Converted"].includes(lead.status)),
   };
 
   return (
     <div className="grid gap-5">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <div><h1 className="text-3xl font-black text-slate-950">Follow-up Management</h1>
-        <p className="mt-2 text-slate-500">Add reminders, mark complete, reschedule, and keep marketing callbacks disciplined.</p></div>
-        <button className="crm-btn-primary" onClick={() => setTaskLead(leads[0])}><CalendarPlus size={16} /> Add reminder</button>
+        <div><p className="dialyatech-chip">{operationLabel}</p><h1 className="mt-3 text-3xl font-black text-slate-950">Follow-up Management</h1>
+        <p className="mt-2 text-slate-500">Add reminders, mark complete, reschedule, and keep callbacks disciplined for your assigned operation.</p></div>
+        <button className="crm-btn-primary" onClick={() => setTaskLead(visibleLeads[0])} disabled={!visibleLeads.length}><CalendarPlus size={16} /> Add reminder</button>
       </div>
       <section className="grid gap-5 xl:grid-cols-4">
         {Object.entries(groups).map(([title, rows]) => (

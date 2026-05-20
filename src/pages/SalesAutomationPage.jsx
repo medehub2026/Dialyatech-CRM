@@ -2,10 +2,11 @@ import { BellRing, CheckCircle2, Clock3, MessageSquare, Send, Zap } from "lucide
 import StatusBadge from "../components/StatusBadge";
 import { useCRMData } from "../hooks/useCRMData";
 import { isOverdue, isToday } from "../utils/calculations";
+import { filterLeadsByRole } from "../utils/accessControl";
 
-export default function SalesAutomationPage({ actions, setPage }) {
+export default function SalesAutomationPage({ actions, setPage, role, operationLabel }) {
   const { leads, messages, settings, setSettings, toast } = useCRMData();
-  const salesLeads = leads.filter((lead) => ["B2B Customer", "D2C Customer"].includes(lead.type));
+  const salesLeads = filterLeadsByRole(leads, role);
   const dueNow = salesLeads.filter((lead) => isToday(lead.nextFollowUp) || isOverdue(lead.nextFollowUp));
   const upcoming = salesLeads.filter((lead) => lead.nextFollowUp && !isToday(lead.nextFollowUp) && !isOverdue(lead.nextFollowUp)).slice(0, 5);
   const replyCount = messages.filter((message) => message.status === "Replied").length;
@@ -19,9 +20,9 @@ export default function SalesAutomationPage({ actions, setPage }) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(255,79,174,0.3),transparent_18rem),radial-gradient(circle_at_90%_8%,rgba(62,201,214,0.22),transparent_16rem)]" />
         <div className="relative flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-wide text-[#ede6ff]"><Zap size={14} /> Sales reminder automation</p>
-            <h1 className="mt-4 text-3xl font-black tracking-tight lg:text-5xl">Automate B2B and D2C sales follow-ups with Interakt-ready reminders.</h1>
-            <p className="mt-3 max-w-3xl text-[#ede6ff]">Track due leads, send WhatsApp templates, schedule reminders, and keep reply logs ready for backend Interakt automation.</p>
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-wide text-[#ede6ff]"><Zap size={14} /> {operationLabel} automation</p>
+            <h1 className="mt-4 text-3xl font-black tracking-tight lg:text-5xl">Automate your operation follow-ups with Interakt-ready reminders.</h1>
+            <p className="mt-3 max-w-3xl text-[#ede6ff]">Track due records, send WhatsApp templates, schedule reminders, and keep reply logs ready for backend Interakt automation.</p>
           </div>
           <button className="crm-btn-primary shrink-0" onClick={() => setPage("whatsapp")}><MessageSquare size={16} /> Open Interakt center</button>
         </div>
@@ -29,7 +30,7 @@ export default function SalesAutomationPage({ actions, setPage }) {
 
       <section className="grid gap-4 md:grid-cols-4">
         {[
-          ["B2B + D2C leads", salesLeads.length, "Active sales records", Clock3],
+          [`${operationLabel} leads`, salesLeads.length, "Active records", Clock3],
           ["Due reminders", dueNow.length, "Today and overdue", BellRing],
           ["WhatsApp replies", replyCount, "Needs sales response", MessageSquare],
           ["Automation", automationEnabled ? "On" : "Off", "Interakt workflow", CheckCircle2],
