@@ -51,5 +51,17 @@ function App() {
 createRoot(document.getElementById("root")).render(<App />);
 
 function normalizeRole(role = "Super Admin") {
+  const map = {
+    SUPER_ADMIN: "Super Admin",
+    CRM_ADMIN: "CRM Admin",
+    MARKETING_MANAGER: "Marketing Manager",
+    SALES_EXECUTIVE: "Sales Executive",
+    SUPPORT_EXECUTIVE: "Support Executive",
+    PHARMACY_SALES_EXECUTIVE: "Pharmacy Sales Executive",
+    DELIVERY_ONBOARDING_EXECUTIVE: "Delivery Onboarding Executive",
+    B2B_SALES_EXECUTIVE: "B2B Sales Executive",
+    B2C_SALES_EXECUTIVE: "B2C Sales Executive",
+  };
+  if (map[role]) return map[role];
   return role.toLowerCase().split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }

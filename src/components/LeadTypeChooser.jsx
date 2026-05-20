@@ -27,8 +27,9 @@ const leadOptions = [
   },
 ];
 
-export default function LeadTypeChooser({ open, onClose, onSelect }) {
+export default function LeadTypeChooser({ open, allowedTypes = [], onClose, onSelect }) {
   if (!open) return null;
+  const visibleOptions = leadOptions.filter((option) => !allowedTypes.length || allowedTypes.includes(option.type));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#130d2e]/70 p-4" role="dialog" aria-modal="true">
@@ -43,7 +44,7 @@ export default function LeadTypeChooser({ open, onClose, onSelect }) {
         </div>
 
         <div className="mt-5 grid gap-3 md:grid-cols-2">
-          {leadOptions.map((option) => {
+          {visibleOptions.map((option) => {
             const Icon = option.icon;
             return (
               <button key={option.type} className="rounded-[1.25rem] border border-[#e5ddf7] bg-[#faf9fe] p-4 text-left transition hover:border-[#d8c9ff] hover:bg-[#f7f5fc]" onClick={() => onSelect(option.type)}>

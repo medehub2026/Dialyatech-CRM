@@ -5,6 +5,7 @@ const modelMap = {
   pharmacyLeads: "pharmacyLead",
   deliveryLeads: "deliveryPartnerLead",
   b2bLeads: "b2BCustomerLead",
+  d2cLeads: "d2CCustomerLead",
   followups: "followUpTask",
   activities: "activityLog",
   whatsappMessages: "whatsAppMessage",

@@ -1,7 +1,7 @@
 import { Bell, LogOut, Menu, Plus, RefreshCcw, Search, ShieldCheck } from "lucide-react";
 import { ROLES } from "../data/demoData";
 
-export default function Topbar({ auth, onNewLead, pageTitle, mobileOpen, setMobileOpen, globalSearch, setGlobalSearch, role, setRole, resetDemo }) {
+export default function Topbar({ auth, onNewLead, pageTitle, mobileOpen, setMobileOpen, globalSearch, setGlobalSearch, role, setRole, canSwitchRole = false, resetDemo }) {
   return (
     <header className="sticky top-0 z-30 border-b border-[#e5ddf7] bg-white/85 px-4 py-3 backdrop-blur-xl lg:px-6">
       <div className="flex flex-wrap items-center gap-3">
@@ -14,11 +14,15 @@ export default function Topbar({ auth, onNewLead, pageTitle, mobileOpen, setMobi
           <Search className="pointer-events-none absolute left-3 top-3 text-[#6b3fd4]" size={18} />
           <input className="crm-input pl-10" value={globalSearch} onChange={(event) => setGlobalSearch(event.target.value)} placeholder="Search lead, phone, city, stage..." />
         </label>
-        <select className="crm-input w-auto min-w-44" value={role} onChange={(event) => setRole(event.target.value)} title="Role-based UI placeholder">
-          {ROLES.map((item) => <option key={item}>{item}</option>)}
-        </select>
+        {canSwitchRole ? (
+          <select className="crm-input w-auto min-w-44" value={role} onChange={(event) => setRole(event.target.value)} title="Role-based UI placeholder">
+            {ROLES.map((item) => <option key={item}>{item}</option>)}
+          </select>
+        ) : (
+          <div className="hidden rounded-2xl border border-[#e5ddf7] bg-[#f7f5fc] px-3 py-2 text-sm font-black text-[#4b4469] md:block">{role}</div>
+        )}
         <button className="crm-btn-primary" onClick={onNewLead}><Plus size={16} /> New Lead</button>
-        <button className="crm-btn-soft hidden sm:inline-flex" onClick={resetDemo}><RefreshCcw size={16} /> Reset demo</button>
+        {canSwitchRole ? <button className="crm-btn-soft hidden sm:inline-flex" onClick={resetDemo}><RefreshCcw size={16} /> Reset demo</button> : null}
         <button className="hidden rounded-2xl border border-[#e5ddf7] bg-[#f7f5fc] p-2 text-[#4b4469] hover:border-[#d8c9ff] xl:inline-flex" title="Notifications"><Bell size={18} /></button>
         <div className="hidden items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-black text-emerald-700 xl:flex">
           <ShieldCheck size={17} /> API ready

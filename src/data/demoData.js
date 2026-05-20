@@ -1,13 +1,17 @@
 export const LEAD_STATUSES = ["New", "Contacted", "Interested", "KYC Pending", "Approved", "Rejected", "Negotiation", "Converted", "Lost"];
 export const PIPELINE_STAGES = ["New", "Contacted", "Interested", "KYC Pending", "Negotiation", "Converted", "Lost"];
 export const LEAD_TYPES = ["Pharmacy", "Delivery Partner", "B2B Customer", "D2C Customer"];
-export const ROLES = ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive"];
+export const ROLES = ["Super Admin", "CRM Admin", "Marketing Manager", "Sales Executive", "Support Executive", "Pharmacy Sales Executive", "Delivery Onboarding Executive", "B2B Sales Executive", "B2C Sales Executive"];
 
 export const teamMembers = [
   { id: "tm-1", name: "Rahul Sharma", role: "Sales Executive", city: "Guwahati" },
   { id: "tm-2", name: "Priya Das", role: "Marketing Manager", city: "Beltola" },
   { id: "tm-3", name: "Amit Baruah", role: "Sales Executive", city: "Dispur" },
   { id: "tm-4", name: "Meera Nath", role: "Support Executive", city: "Six Mile" },
+  { id: "tm-5", name: "Nisha Pharmacy", role: "Pharmacy Sales Executive", city: "Guwahati" },
+  { id: "tm-6", name: "Dilip Delivery", role: "Delivery Onboarding Executive", city: "Guwahati" },
+  { id: "tm-7", name: "Suman B2B", role: "B2B Sales Executive", city: "Guwahati" },
+  { id: "tm-8", name: "Riya B2C", role: "B2C Sales Executive", city: "Guwahati" },
 ];
 
 export const demoLeads = [

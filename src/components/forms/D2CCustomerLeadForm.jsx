@@ -58,7 +58,7 @@ export default function D2CCustomerLeadForm({ open, mode, lead, onClose, onSave 
   };
 
   return (
-    <FormShell title={mode === "view" ? "D2C Customer Details" : mode === "edit" ? "Edit D2C Lead" : "Add D2C Sales Lead"} subtitle="Consumer lead, purchase intent, order value, refill reminder, WhatsApp opt-in, and follow-up workflow." onClose={onClose} onSubmit={submit} readonly={readonly}>
+    <FormShell title={mode === "view" ? "B2C Customer Details" : mode === "edit" ? "Edit B2C Lead" : "Add B2C / D2C Sales Lead"} subtitle="Consumer lead, purchase intent, order value, refill reminder, WhatsApp opt-in, and follow-up workflow." onClose={onClose} onSubmit={submit} readonly={readonly}>
       <div className="grid gap-4 p-6 md:grid-cols-2">
         <FormField label="Customer name"><input required disabled={readonly} className="crm-input" value={form.customerName} onChange={(e) => update("customerName", e.target.value)} /></FormField>
         <FormField label="Mobile"><input required pattern="[6-9][0-9]{9}" disabled={readonly} className="crm-input" value={form.mobile} onChange={(e) => update("mobile", e.target.value)} /></FormField>

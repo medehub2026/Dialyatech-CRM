@@ -18,6 +18,10 @@ export const db = {
     },
     { id: "user-2", name: "Rahul Sharma", email: "rahul@medehub.in", phone: "9864011101", passwordHash: bcrypt.hashSync("demo123", 10), role: "SALES_EXECUTIVE", status: "ACTIVE", createdAt: now(), updatedAt: now() },
     { id: "user-3", name: "Priya Das", email: "priya@medehub.in", phone: "9706019921", passwordHash: bcrypt.hashSync("demo123", 10), role: "MARKETING_MANAGER", status: "ACTIVE", createdAt: now(), updatedAt: now() },
+    { id: "user-4", name: "Nisha Pharmacy", email: "pharmacy@medehub.in", phone: "9864012200", passwordHash: bcrypt.hashSync("demo123", 10), role: "PHARMACY_SALES_EXECUTIVE", status: "ACTIVE", createdAt: now(), updatedAt: now() },
+    { id: "user-5", name: "Dilip Delivery", email: "delivery@medehub.in", phone: "9864013300", passwordHash: bcrypt.hashSync("demo123", 10), role: "DELIVERY_ONBOARDING_EXECUTIVE", status: "ACTIVE", createdAt: now(), updatedAt: now() },
+    { id: "user-6", name: "Suman B2B", email: "b2b@medehub.in", phone: "9864014400", passwordHash: bcrypt.hashSync("demo123", 10), role: "B2B_SALES_EXECUTIVE", status: "ACTIVE", createdAt: now(), updatedAt: now() },
+    { id: "user-7", name: "Riya B2C", email: "b2c@medehub.in", phone: "9864015500", passwordHash: bcrypt.hashSync("demo123", 10), role: "B2C_SALES_EXECUTIVE", status: "ACTIVE", createdAt: now(), updatedAt: now() },
   ],
   pharmacyLeads: [
     {

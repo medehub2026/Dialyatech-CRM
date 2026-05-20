@@ -13,6 +13,10 @@ enum UserRole {
   MARKETING_MANAGER
   SALES_EXECUTIVE
   SUPPORT_EXECUTIVE
+  PHARMACY_SALES_EXECUTIVE
+  DELIVERY_ONBOARDING_EXECUTIVE
+  B2B_SALES_EXECUTIVE
+  B2C_SALES_EXECUTIVE
 }
 
 enum UserStatus {
@@ -133,6 +137,31 @@ model B2BCustomerLead {
   blocked                 Boolean    @default(false)
   createdAt               DateTime   @default(now())
   updatedAt               DateTime   @updatedAt
+}
+
+model D2CCustomerLead {
+  id                 String     @id @default(cuid())
+  customerName       String
+  mobile             String     @unique
+  whatsappNumber     String?
+  email              String?
+  city               String
+  area               String
+  address            String?
+  customerCategory   String     @default("Home Delivery")
+  requirementType    String?
+  expectedOrderValue Decimal?   @db.Decimal(12, 2)
+  lastOrderValue     Decimal?   @db.Decimal(12, 2)
+  purchaseIntent     String     @default("Medium")
+  leadSource         String?
+  reminderOptIn      String     @default("Yes")
+  assignedTo         String?
+  nextFollowUpDate   DateTime?
+  remarks            String?
+  status             LeadStatus @default(NEW)
+  blocked            Boolean    @default(false)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 }
 
 model FollowUpTask {
